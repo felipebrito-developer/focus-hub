@@ -1,0 +1,50 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "opencode.md",
+    ".project/opencode.md",
+    ".project/guidelines/**/*.md",
+    ".project/standards/**/*.md",
+    ".project/roadmap/current-work.md",
+    ".project/roadmap/epics.md",
+    ".project/spec/app-summary.md",
+    ".global/guidelines/**/*.md",
+    ".global/standards/**/*.md"
+  ],
+  "references": {
+    "docs": {
+      "path": "docs",
+      "description": "Focus-Hub documentation: business rules, roadmaps, UI specs, DB structure, component knowledge base. Consult before creating new UI components or DB schemas."
+    }
+  },
+  "agent": {
+    "architect": {
+      "permission": {
+        "task": {
+          "*": "deny",
+          "web-developer": "allow",
+          "react-native-developer": "allow",
+          "node-developer": "allow",
+          "go-developer": "allow",
+          "test-creator": "allow",
+          "test-runner": "allow",
+          "design-reviewer": "allow",
+          "code-reviewer": "allow",
+          "db-engineer": "allow",
+          "po-agent": "allow"
+        }
+      }
+    }
+  },
+  "mcp": {
+    "linear": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-linear"],
+      "enabled": true,
+      "environment": {
+        "LINEAR_API_KEY": "{env:LINEAR_API_KEY}"
+      },
+      "timeout": 10000
+    }
+  }
+}
