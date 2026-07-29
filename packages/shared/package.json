@@ -5,7 +5,9 @@
 	"types": "index.ts",
 	"exports": {
 		".": "./index.ts",
-		"./@types/*": "./@types/*"
+		"./@types/*": "./@types/*",
+		"./db/schema": "./db/schema/index.ts",
+		"./db/initial-data": "./db/initial-data.ts"
 	},
 	"scripts": {
 		"type-check": "tsc --noEmit",
