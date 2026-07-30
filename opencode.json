@@ -11,12 +11,6 @@
     ".global/guidelines/**/*.md",
     ".global/standards/**/*.md"
   ],
-  "references": {
-    "docs": {
-      "path": "docs",
-      "description": "Focus-Hub documentation: business rules, roadmaps, UI specs, DB structure, component knowledge base. Consult before creating new UI components or DB schemas."
-    }
-  },
   "agent": {
     "architect": {
       "permission": {
@@ -39,7 +33,7 @@
   "mcp": {
     "linear": {
       "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-linear"],
+      "command": ["npx", "-y", "mcp-linear"],
       "enabled": true,
       "environment": {
         "LINEAR_API_KEY": "{env:LINEAR_API_KEY}"

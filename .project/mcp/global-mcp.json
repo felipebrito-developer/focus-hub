@@ -1,0 +1,13 @@
+{
+  "mcp": {
+    "linear": {
+      "type": "local",
+      "command": ["npx", "-y", "mcp-linear"],
+      "enabled": true,
+      "environment": {
+        "LINEAR_API_KEY": "{env:LINEAR_API_KEY}"
+      },
+      "timeout": 10000
+    }
+  }
+}
