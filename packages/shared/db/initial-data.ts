@@ -230,6 +230,7 @@ export const INITIAL_HABITS = [
 			"Daily commitment to respiratory health and freedom from nicotine.",
 		categoryId: "cat-health",
 		frequencyId: "freq-daily",
+		streakCount: 0,
 		isSynced: true,
 	},
 	{
@@ -249,6 +250,7 @@ export const INITIAL_HABITS = [
 			"Maintaining optimal hydration levels for cognitive performance.",
 		categoryId: "cat-health",
 		frequencyId: "freq-daily",
+		streakCount: 0,
 		isSynced: true,
 	},
 	{
@@ -257,6 +259,7 @@ export const INITIAL_HABITS = [
 		description: "Resistance training and strength maintenance.",
 		categoryId: "cat-fitness",
 		frequencyId: "freq-weekly",
+		streakCount: 0,
 		isSynced: true,
 	},
 	{
@@ -265,6 +268,7 @@ export const INITIAL_HABITS = [
 		description: "Core strength, flexibility, and controlled movement.",
 		categoryId: "cat-fitness",
 		frequencyId: "freq-weekly",
+		streakCount: 0,
 		isSynced: true,
 	},
 ];
@@ -279,6 +283,7 @@ export const INITIAL_GOALS = [
 			"Build cardiovascular capacity to complete a 5K race without stopping.",
 		status: "active",
 		isSynced: true,
+		progress: 0,
 	},
 	{
 		id: "goal-read-12",
@@ -288,6 +293,7 @@ export const INITIAL_GOALS = [
 		description: "Expand worldview by reading one impactful book per month.",
 		status: "active",
 		isSynced: true,
+		progress: 0,
 	},
 	{
 		id: "goal-daily-health",
@@ -297,6 +303,7 @@ export const INITIAL_GOALS = [
 		description: "Treating the body as a temple for the strategic mind.",
 		status: "active",
 		isSynced: true,
+		progress: 0,
 	},
 	{
 		id: "goal-home-server",
@@ -306,6 +313,7 @@ export const INITIAL_GOALS = [
 		description: "Deploying a local strategic infrastructure for data privacy.",
 		status: "active",
 		isSynced: true,
+		progress: 0,
 	},
 	{
 		id: "goal-ai-mastery",
@@ -315,6 +323,7 @@ export const INITIAL_GOALS = [
 		description: "Understanding the foundations of machine intelligence.",
 		status: "active",
 		isSynced: true,
+		progress: 0,
 	},
 	{
 		id: "goal-personal-hub",
@@ -324,6 +333,7 @@ export const INITIAL_GOALS = [
 		description: "Building the digital engine to drive life strategy.",
 		status: "active",
 		isSynced: true,
+		progress: 0,
 	},
 	{
 		id: "goal-weekly-art",
@@ -333,6 +343,7 @@ export const INITIAL_GOALS = [
 		description: "Creating art in at least 40 weeks per year.",
 		status: "active",
 		isSynced: true,
+		progress: 0,
 	},
 	{
 		id: "goal-mental-care",
@@ -342,6 +353,7 @@ export const INITIAL_GOALS = [
 		description: "Consistent mental maintenance to ensure peak performance.",
 		status: "active",
 		isSynced: true,
+		progress: 0,
 	},
 	{
 		id: "goal-sleep-hygiene",
@@ -351,6 +363,7 @@ export const INITIAL_GOALS = [
 		description: "Regulating Circadian rhythms for cognitive longevity.",
 		status: "active",
 		isSynced: true,
+		progress: 0,
 	},
 ];
 
@@ -569,7 +582,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-salary",
 		name: "Salary",
-		amount: 3299.4,
 		amountType: "Money",
 		categoryId: "cat-professional",
 		description: "Standard monthly salary",
@@ -577,7 +589,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-mid-salary",
 		name: "Mid-Salary",
-		amount: 3853.03,
 		amountType: "Money",
 		categoryId: "cat-professional",
 		description: "Mid-month salary payment",
@@ -585,7 +596,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-vr",
 		name: "VR",
-		amount: 443.1,
 		amountType: "Money",
 		categoryId: "cat-meals",
 		description: "Vale Refeição (Meals)",
@@ -593,7 +603,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-va",
 		name: "VA",
-		amount: 443.1,
 		amountType: "Money",
 		categoryId: "cat-meals",
 		description: "Vale Alimentação (Groceries)",
@@ -601,7 +610,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-vale-farmacia",
 		name: "Vale Farmacia",
-		amount: 100.0,
 		amountType: "Money",
 		categoryId: "cat-health",
 		description: "Pharmacy benefits",
@@ -609,7 +617,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-energy-mental",
 		name: "Mental Energy",
-		amount: 100,
 		amountType: "Daily Energy",
 		categoryId: "cat-health",
 		description: "Capacity for focused attention",
@@ -617,7 +624,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-energy-physical",
 		name: "Physical Energy",
-		amount: 100,
 		amountType: "Daily Energy",
 		categoryId: "cat-health",
 		description: "Capacity for physical activity",
@@ -625,7 +631,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-energy-social",
 		name: "Social Energy",
-		amount: 100,
 		amountType: "Daily Energy",
 		categoryId: "cat-health",
 		description: "Capacity for social interaction",
@@ -634,7 +639,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-beet-powder",
 		name: "Beet Powder",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Dietary supplement",
@@ -642,7 +646,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-pumpkin-seeds",
 		name: "Pumpkin Seeds",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Healthy snacks",
@@ -650,7 +653,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-sunflower-seeds",
 		name: "Sunflower Seeds",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Healthy snacks",
@@ -658,7 +660,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-rice",
 		name: "Rice",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Pantry staple",
@@ -666,7 +667,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-sugar",
 		name: "Sugar",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Pantry staple",
@@ -674,7 +674,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-potato",
 		name: "Potato",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Fresh produce",
@@ -682,7 +681,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-chicken",
 		name: "Chicken",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Protein source",
@@ -690,7 +688,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-flank-steak",
 		name: "Flank Steak",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Protein source",
@@ -698,7 +695,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-pork-ribs",
 		name: "Pork Ribs",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Protein source",
@@ -706,7 +702,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-salt",
 		name: "Salt",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Seasoning",
@@ -714,7 +709,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-chimichurri",
 		name: "Chimichurri Seasoning",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Seasoning",
@@ -722,7 +716,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-oregano",
 		name: "Oregano Seasoning",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Seasoning",
@@ -730,7 +723,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-garlic",
 		name: "Garlic",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Seasoning",
@@ -738,7 +730,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-onion",
 		name: "Onion",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Fresh produce",
@@ -746,7 +737,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-tomato",
 		name: "Tomato",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Fresh produce",
@@ -754,7 +744,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-food-eggs",
 		name: "Eggs",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-meals",
 		description: "Protein source",
@@ -763,7 +752,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-clean-laundry-detergent",
 		name: "Laundry Detergent",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-home-cleaning",
 		description: "Cleaning supply",
@@ -771,7 +759,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-clean-alcohol-vinegar",
 		name: "Alcohol Vinegar",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-home-cleaning",
 		description: "Cleaning supply",
@@ -779,7 +766,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-clean-disinfectant",
 		name: "Disinfectant",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-home-cleaning",
 		description: "Cleaning supply",
@@ -787,7 +773,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-clean-veja",
 		name: "All-purpose Cleaner (Veja)",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-home-cleaning",
 		description: "Cleaning supply",
@@ -795,7 +780,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-clean-degreaser",
 		name: "Degreaser",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-home-cleaning",
 		description: "Cleaning supply",
@@ -803,7 +787,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-clean-dish-soap",
 		name: "Dish Soap",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-home-cleaning",
 		description: "Cleaning supply",
@@ -812,7 +795,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-care-bath-oil",
 		name: "Bath Oil",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-health",
 		description: "Personal care",
@@ -820,7 +802,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-care-conditioner",
 		name: "Conditioner",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-health",
 		description: "Personal care",
@@ -828,7 +809,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-care-shampoo",
 		name: "Shampoo",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-health",
 		description: "Personal care",
@@ -836,7 +816,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-care-hair-mask",
 		name: "Hair Mask",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-health",
 		description: "Personal care",
@@ -844,7 +823,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-care-toothpaste",
 		name: "Toothpaste",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-health",
 		description: "Personal care",
@@ -852,7 +830,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-care-moisturizer",
 		name: "Moisturizer",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-health",
 		description: "Personal care",
@@ -860,7 +837,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-care-sunscreen",
 		name: "Sunscreen",
-		amount: 0,
 		amountType: "Liters",
 		categoryId: "cat-health",
 		description: "Personal care",
@@ -868,7 +844,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-care-toothbrush",
 		name: "Toothbrush",
-		amount: 0,
 		amountType: "Unit",
 		categoryId: "cat-health",
 		description: "Personal care",
@@ -877,7 +852,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-fit-plate-2kg",
 		name: "2kg Weight Plate",
-		amount: 0,
 		amountType: "Unit",
 		categoryId: "cat-fitness",
 		description: "Fitness equipment",
@@ -885,7 +859,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-fit-plate-5kg",
 		name: "5kg Weight Plate",
-		amount: 0,
 		amountType: "Unit",
 		categoryId: "cat-fitness",
 		description: "Fitness equipment",
@@ -893,7 +866,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-fit-plate-1kg",
 		name: "1kg Weight Plate",
-		amount: 0,
 		amountType: "Unit",
 		categoryId: "cat-fitness",
 		description: "Fitness equipment",
@@ -901,7 +873,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-fit-pullup-bar",
 		name: "Pull-up Bar",
-		amount: 0,
 		amountType: "Unit",
 		categoryId: "cat-fitness",
 		description: "Fitness equipment",
@@ -910,7 +881,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-pet-litter",
 		name: "Cat Litter",
-		amount: 0,
 		amountType: "Kilo",
 		categoryId: "cat-social",
 		description: "Pet care",
@@ -918,7 +888,6 @@ export const INITIAL_RESOURCES = [
 	{
 		id: "res-pet-food",
 		name: "Cat Food",
-		amount: 0,
 		amountType: "kg",
 		categoryId: "cat-social",
 		description: "Pet care",

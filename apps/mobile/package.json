@@ -4,11 +4,14 @@
 	"private": true,
 	"scripts": {
 		"android": "react-native run-android",
+		"db:push": "drizzle-kit push --config ../../packages/shared/drizzle.config.ts",
+		"format": "biome format --write .",
 		"ios": "react-native run-ios",
 		"lint": "biome check .",
+		"seed": "bun ../../packages/shared/db/seed.ts",
+		"seed:reset": "bun ../../packages/shared/db/seed.ts --reset",
 		"start": "react-native start",
-		"test": "jest",
-		"format": "biome format --write ."
+		"test": "jest"
 	},
 	"dependencies": {
 		"react": "18.2.0",
