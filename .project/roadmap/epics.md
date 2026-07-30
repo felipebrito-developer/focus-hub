@@ -6,13 +6,15 @@
 
 | Epic | Linear ID | Goal | Spec | Tasks |
 | :--- | :--- | :--- | :--- | :--- |
-| EPIC: M0 Foundation | FEL-33 | Wire+fix + base infra + nav shell + i18n + multi-theme | [architecture/milestone-0-foundation.md](../spec/architecture/milestone-0-foundation.md) | FEL-34–FEL-47 (14 tasks) |
+| EPIC: M0 Foundation | FEL-33 | Wire+fix + base infra + nav shell + i18n + multi-theme + auth gate | [architecture/milestone-0-foundation.md](../spec/architecture/milestone-0-foundation.md) | FEL-34–FEL-47 (14 tasks) |
+| EPIC: Local Auth (Mocked) | FEL-48 | user table + session atoms + AuthStack + Welcome/Register/Login refactor + tests | [architecture/services/local-auth.md](../spec/architecture/services/local-auth.md) | FEL-49–FEL-55 (7 tasks) |
 
 ### M0 Task Dependency Phases
 - **Phase 1 (parallel):** FEL-40 (pkg rename), FEL-34 (Biome), FEL-39 (nav libs), FEL-43 (i18n), FEL-42 (theme), FEL-41 (bun:test)
 - **Phase 2 (sequential, after FEL-40):** FEL-37 (drizzle.config) → FEL-35 (wire schema) → FEL-38 (seed) → FEL-36 (bootstrap)
 - **Phase 3 (after nav+i18n+theme):** FEL-45 (tab stacks) → FEL-46 (settings) → FEL-44 (drawer)
-- **Phase 4 (after ALL):** FEL-47 (App.tsx rewrite)
+- **Phase 4 (auth, after DB wired + nav libs):** FEL-49 (user schema) → FEL-54 (session atoms) → FEL-52 (AuthStack) → FEL-50/55/51 (Welcome/Register/Login, parallel) → FEL-53 (tests)
+- **Phase 5 (after ALL incl auth):** FEL-47 (App.tsx rewrite + auth gate) — depends on FEL-54 + FEL-52
 
 ---
 

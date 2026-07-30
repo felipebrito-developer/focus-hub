@@ -1,9 +1,9 @@
 # Specification: Milestone 0 — Foundation
 
-> **Status:** Final (Phase 3 complete — Epic FEL-33 + tasks FEL-34–FEL-47 created in Linear under Milestone `0. Base Structure`).
-> **Source docs:** `docs/Roadmaps/mobile-app.md` (Milestone 0), `docs/UI/ui-structure.md`, `docs/Structure/db-structure.md`, `docs/UI/ui-principles.md`.
+> **Status:** Final (Phase 3 complete — Epic FEL-33 + tasks FEL-34–FEL-47 created in Linear under Milestone `0. Base Structure`). **Auth added post-Phase-3** (grill G1=A resolved) — §11 + auth exit criteria appended; auth epic FEL-48+ pending PO slicing.
+> **Source docs:** `docs/Roadmaps/mobile-app.md` (Milestone 0), `docs/UI/ui-structure.md`, `docs/Structure/db-structure.md`, `docs/UI/ui-principles.md`, `architecture/services/local-auth.md`.
 > **Stack pin:** React Native 0.74 (bare) + Jotai + op-sqlite + Drizzle + React Native Paper + bun:test. See `opencode.md`.
-> **Grill decisions:** 10 resolved — see Appendix A.
+> **Grill decisions:** 13 resolved — see Appendix A.
 
 ---
 
@@ -21,10 +21,11 @@ The mobile app has substantial scaffolding (11 Drizzle schema files, seed data, 
 6. **No i18n** — all UI strings hardcoded. pt-br + en-us not supported.
 7. **Single hardcoded theme** — warm dark minimalist theme exists but is not switchable. No theme registry. No persistence.
 8. **Missing nav libraries** — only `native-stack` installed. Drawer + bottom-tabs (required by `ui-structure.md`) not installed.
+9. **No auth gate** — auth screens (`WelcomeScreen`, `LoginScreen`, `RegisterScreen`) exist in `features/auth/` but no `user` table, no session persistence, no login gate. App is accessible without authentication, violating the neuro-inclusive full-gate decision (G1=A). Tests exist but target jest (not migrated to bun:test).
 
 ### Goal
 
-Make the app **bootable, navigable, testable, and lintable** — with DB connected, shared package wired, i18n + multi-theme system in place. This is the foundation every subsequent milestone builds on. No feature screens; no routes beyond placeholder screens.
+Make the app **bootable, navigable, testable, lintable, and auth-gated** — with DB connected (incl. `user` table), shared package wired, i18n + multi-theme system in place, and a local auth gate (register on first launch, auto-login for returning users). This is the foundation every subsequent milestone builds on. No feature screens; no routes beyond placeholder screens.
 
 ### Target Persona & User Journey
 
@@ -36,8 +37,10 @@ Make the app **bootable, navigable, testable, and lintable** — with DB connect
 3. Developer runs `bun run lint` → Biome checks both packages.
 4. Developer runs `bun run db:push` → Drizzle pushes schema to local SQLite.
 5. Developer runs `bun run seed` → dev seed script populates local DB.
-6. Developer runs `bun run ios` / `bun run android` → app boots → drawer with profile card + 4 module entries + settings → each module shows a BottomTab navigator with placeholder screens → settings screen has theme toggle (light/dark/warm-dark) persisted across restarts → UI strings render in detected locale (en-us default, pt-br fallback via `react-native-localize`).
+6. Developer runs `bun run ios` / `bun run android` → app boots → **if no user in DB: AuthStack (Welcome → Register)** → after auth → drawer with profile card + 4 module entries + settings → each module shows a BottomTab navigator with placeholder screens → settings screen has theme toggle (light/dark/warm-dark) persisted across restarts → UI strings render in detected locale (en-us default, pt-br fallback via `react-native-localize`).
 7. First app launch (end-user) → DB initializes → if empty, first-launch bootstrap seeds default content (categories, default tags, default settings).
+8. Returning user (`session_active=true`) → Welcome detects user + active session → auto-login → Focus module (Login screen skipped).
+9. Session cleared (`session_active=false`) → Welcome → Login screen → validate credentials → `session_active=true` → Focus module.
 
 ### Success Metrics
 
@@ -50,6 +53,7 @@ Make the app **bootable, navigable, testable, and lintable** — with DB connect
 - **Navigation:** drawer opens, navigates to all 4 stacks + settings. BottomTab renders in each stack.
 - **i18n:** changing device locale to `pt-BR` renders Portuguese strings. Default fallback `en-US`.
 - **Theme:** toggling theme in settings persists to AsyncStorage. Relaunching app restores selected theme.
+- **Auth gate:** first launch with empty `user` table → Welcome → Register (no skip) → user row created with `session_active=1` → Focus module. Returning launch with `session_active=1` → auto-login (Login screen skipped).
 
 ### Scope & Non-Goals
 
@@ -70,7 +74,11 @@ Make the app **bootable, navigable, testable, and lintable** — with DB connect
 - Settings screen with theme toggle (light, dark, warm-dark).
 - i18n setup: `i18next` + `react-i18next` + `react-native-localize`. Flat JSON locale files (`locales/en-us.json`, `locales/pt-br.json`). Default `en-us`, fallback `en-us`, detection via `react-native-localize`.
 - Multi-theme system: Paper theme switching via Jotai + AsyncStorage. Registry of named themes (light, dark, warm-dark). Existing warm-dark theme refactored into registry entry.
-- Root `App.tsx` rewritten: JotaiProvider → PaperProvider (dynamic theme) → NavigationContainer → DrawerNavigator.
+- Root `App.tsx` rewritten: JotaiProvider → PaperProvider (dynamic theme) → NavigationContainer → **auth gate** (`AuthStack` if unauthenticated, `DrawerNavigator` if authenticated).
+- **Local auth gate (G1=A):** `user` table Drizzle schema (`packages/shared/db/schema/user.ts`) — id (text PK UUID), name, email (unique), password (plain — mocked), age, `session_active` (bool), `created_at`, `updated_at`, `is_synced`, `last_synced_at`. Single-row table (single-user device).
+- Auth stack wired into navigation: Welcome → Register (first launch, mandatory, no skip) / Login (`session_active=false`) / auto-login (`session_active=true`) → Focus module (drawer shell).
+- Session logic in `features/auth/state/`: Jotai atoms read `user.session_active` from SQLite (single source of truth — no AsyncStorage split). `useSession()` hook returns `{ isAuthenticated, user | null }`.
+- Refactor existing `WelcomeScreen`, `LoginScreen`, `RegisterScreen` to use Drizzle + session logic. Migrate `features/auth/__tests__/` from jest to bun:test.
 
 **OUT of scope (deferred):**
 - Feature screens (any module content beyond placeholder).
@@ -78,9 +86,10 @@ Make the app **bootable, navigable, testable, and lintable** — with DB connect
 - Expo Router / Solito migration.
 - Drizzle migration files (`drizzle-kit generate:migration`). Deferred to pre-deploy. Using `push` for dev.
 - Sync engine, backend, AI-bridge.
-- User profile form (name, age, avatar) — deferred to M1 Settings epic.
+- User profile form (name, age, avatar) — deferred to M1 Settings epic. NOTE: `user` table created in M0 (auth needs `name` + `age` columns), but profile editing UI is M1.
 - App version footer — cosmetic, deferred.
 - CI pipeline setup.
+- **Auth OUT of scope:** password hashing/encryption (deferred to `packages/security`), multi-account support, password recovery, demo/guest mode, biometric auth, any network/remote auth. See [local-auth.md](services/local-auth.md).
 
 ---
 
@@ -321,25 +330,77 @@ import { PaperProvider } from 'react-native-paper';
 import { Provider as JotaiProvider } from 'jotai';
 import { useAtomValue } from 'jotai';
 import { themeAtom } from './store/theme';
+import { isAuthenticatedAtom } from './features/auth/state/session';
 import { initDb } from './db';
 import { DrawerNavigator } from './features/drawer/DrawerNavigator';
+import { AuthStack } from './features/auth/AuthStack';
 import './i18n/config';
 import { useEffect } from 'react';
 
 export default function App() {
   const theme = useAtomValue(themeAtom);
+  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
   useEffect(() => { initDb(); }, []);
   return (
     <JotaiProvider>
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          <DrawerNavigator />
+          {isAuthenticated ? <DrawerNavigator /> : <AuthStack />}
         </NavigationContainer>
       </PaperProvider>
     </JotaiProvider>
   );
 }
 ```
+
+> **Auth gate:** `isAuthenticatedAtom` reads `user.session_active` from SQLite (via `useSession()` hook). Unauthenticated → `AuthStack`; authenticated → `DrawerNavigator`. Session flag is single source of truth (no AsyncStorage split). See §11.
+
+#### 11. Local Auth — `apps/mobile/src/features/auth/` + `packages/shared/db/schema/user.ts`
+
+> **Full spec:** [architecture/services/local-auth.md](services/local-auth.md). This section is a summary — defer to the service spec for flow detail + full schema rationale.
+
+**Data model** — new `user` table (Drizzle schema):
+
+| Column | Type | Notes |
+| :--- | :--- | :--- |
+| `id` | text (PK) | UUID |
+| `name` | text | Display name |
+| `email` | text (unique) | Login identifier |
+| `password` | text | Plain (mocked — G1=A, no hash for MVP) |
+| `age` | integer | User age |
+| `session_active` | integer (bool) | `1` = logged in |
+| `created_at` | text | ISO timestamp |
+| `updated_at` | text | ISO timestamp |
+| `is_synced` | integer (bool) | Future sync (default false) |
+| `last_synced_at` | text | Future sync |
+
+Single-row table (single-user device). `email` unique constraint for safety.
+
+**Auth stack** — `features/auth/AuthStack.tsx`:
+- `createNativeStackNavigator()` (existing `native-stack` dep).
+- Screens: `WelcomeScreen` (entry — reads user table → routes), `RegisterScreen` (first launch, mandatory, no skip), `LoginScreen` (session cleared).
+- Post-auth → navigate to `DrawerNavigator` (reset stack).
+
+**Session logic** — `features/auth/state/session.ts`:
+```ts
+import { atom } from 'jotai';
+import { db } from '../../../db';
+import { user } from '@focus-hub/shared/db/schema';
+import { eq } from 'drizzle-orm';
+
+// Read session flag from SQLite (single source of truth)
+export const isAuthenticatedAtom = atom<boolean>(false); // set by useSession() on mount
+export const currentUserAtom = atom<typeof user.$inferSelect | null>(null);
+
+export const useSession = () => {
+  // On mount: query user table → set atoms
+  // Register/login mutations update user.session_active in SQLite → refresh atoms
+};
+```
+
+**Credential storage:** SQLite only. Password plain (mocked — G1=A). Hashing deferred to `packages/security` (post-MVP). No AsyncStorage session split.
+
+**Refactor existing screens:** `WelcomeScreen.tsx`, `LoginScreen.tsx`, `RegisterScreen.tsx` already exist in `features/auth/` — wire to Drizzle + session logic. Existing `__tests__/` migrated from jest to bun:test.
 
 ### Dependency Changes Summary
 
@@ -360,6 +421,9 @@ export default function App() {
 | **Device locale not in resources** | `react-native-localize` returns `undefined` → fallback to `en-us`. |
 | **Drawer/tab navigation crash** | React Navigation error boundaries catch. Placeholder screens have no logic, so crash risk is near-zero. |
 | **Workspace resolution fails after rename** | `bun install` at root re-links. Verified by smoke test importing from `@focus-hub/shared`. |
+| **Auth: register fails (DB insert error)** | `useSession()` catch + log abstractly (no PII). User stays on Register screen. Retry allowed. App does not advance to drawer without valid user row. |
+| **Auth: session flag corrupted/missing** | Welcome reads `user` table; if no row or `session_active` invalid → treat as unauthenticated → Register (no user) or Login (user exists, `session_active=0`). |
+| **Auth: password mismatch on login** | Login screen shows inline error. No rate-limit (local-only, no brute-force risk). User can retry. |
 
 ### Test Strategy (Phase 4 input)
 
@@ -374,12 +438,16 @@ export default function App() {
 - **Component (`*.test.tsx`):**
   - `SettingsScreen` renders 3 theme options; tapping one updates `themeNameAtom`.
   - `DrawerNavigator` renders 5 drawer items.
+  - `WelcomeScreen` routes to `RegisterScreen` when `user` table empty; auto-login when `session_active=1` (mock session atom).
+  - `RegisterScreen` renders required fields; submit creates user row + sets `session_active=1`.
+  - `LoginScreen` validates password against `user` table; mismatch shows inline error.
 - **Manual QA:**
   - App boots on iOS simulator + Android emulator.
   - Drawer navigates to all 4 stacks + settings.
   - BottomTabs render in each stack.
   - Theme toggle persists across app restart.
   - Language change reflects immediately in UI.
+  - **Auth:** first launch (empty `user` table) → Welcome → Register (no skip) → user row created with `session_active=1` → Focus module. Returning launch (`session_active=1`) → auto-login → Focus module. Session cleared (`session_active=0`) → Login → re-auth → Focus module.
 
 ### Exit Criteria
 
@@ -393,6 +461,9 @@ export default function App() {
 8. Theme toggle persists across restarts.
 9. i18n renders in detected locale (pt-br or en-us).
 10. First-launch bootstrap seeds DB if empty.
+11. **Auth gate:** first launch with empty `user` table → Welcome → Register (no skip) → user row created (`session_active=1`) → Focus module.
+12. **Auth gate:** returning launch with `session_active=1` → auto-login → Focus module (Login screen skipped).
+13. **Auth gate:** session cleared (`session_active=0`) → Welcome → Login → validate → `session_active=1` → Focus module.
 
 ---
 
@@ -408,6 +479,9 @@ export default function App() {
 8. **Biome (Q8):** per-package `biome.json`. Reason: future packages may have different languages/rules. Granular overrides.
 9. **i18n locale files (Q9):** flat JSON per locale, default `en-us`, fallback `en-us`, detection via `react-native-localize`. Reason: simple for MVP, can namespace later if scale demands.
 10. **Package name fix (Q10):** rename `@liverubber/shared` → `@focus-hub/shared`, wire `workspace:*`. Reason: it's a bug, not a feature decision. Fix now so M1 imports work.
+11. **Auth credential storage (Q11):** SQLite `user` table (Drizzle schema), password plain (mocked — G1=A, no hash for MVP). Session flag (`session_active`) in SQLite, not AsyncStorage — single source of truth. Reason: local-first consistency (all data in Drizzle), no AsyncStorage session split, hashing deferred to `packages/security` post-MVP.
+12. **Auth login gate (Q12):** Full gate. No demo/guest mode. Reason: neuro-inclusive design — reduces decision friction (no "skip or register?" prompt). Personal data model (meanings, goals, habits) requires user context. Local-only = no security boundary, just UX gate.
+13. **Auth register mandatory (Q13):** Yes, on first launch. No skip button. Welcome detects no user in DB → forces Register flow. Subsequent launches auto-login via persisted `session_active` flag. Reason: enforces user context on first use without friction on return.
 
 ---
 
@@ -422,3 +496,5 @@ export default function App() {
 | Jotai atoms | `apps/mobile/src/store/index.ts` | ♻️ Refactored. `appReadyAtom` kept, `userPreferencesAtom` split into `themeNameAtom` + `localeAtom`. |
 | op-sqlite + Drizzle init | `apps/mobile/src/db/index.ts` | ♻️ Refactored. Schema import uncommented, bootstrap added. |
 | `@focus-hub/shared: workspace:*` dep | `apps/mobile/package.json` line 15 | ✅ Already referenced. Name fix in shared makes it resolve. |
+| Auth screens (3) | `apps/mobile/src/features/auth/*.tsx` (Welcome, Login, Register) | ♻️ Refactored. Wired to Drizzle + session logic. |
+| Auth tests | `apps/mobile/src/features/auth/__tests__/` | ♻️ Migrated from jest to bun:test. |
