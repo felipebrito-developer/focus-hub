@@ -1,0 +1,98 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "src/**",
+        "package.json",
+        "tsconfig.json"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "type-check": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "src/**",
+        "db/**",
+        "*.ts",
+        "*.tsx",
+        "tsconfig.json"
+      ],
+      "outputs": []
+    },
+    "lint": {
+      "inputs": [
+        "src/**",
+        "db/**",
+        "*.ts",
+        "*.tsx",
+        "*.json",
+        "biome.json"
+      ],
+      "outputs": []
+    },
+    "format": {
+      "cache": false,
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": [
+        "type-check"
+      ],
+      "inputs": [
+        "src/**",
+        "db/**",
+        "__tests__/**",
+        "*.test.ts",
+        "*.test.tsx"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
+    },
+    "ios": {
+      "cache": false,
+      "dependsOn": [
+        "type-check"
+      ],
+      "persistent": true
+    },
+    "android": {
+      "cache": false,
+      "dependsOn": [
+        "type-check"
+      ],
+      "persistent": true
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:push": {
+      "cache": false
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "seed": {
+      "cache": false,
+      "dependsOn": [
+        "db:push"
+      ]
+    },
+    "seed:reset": {
+      "cache": false,
+      "dependsOn": [
+        "db:push"
+      ]
+    }
+  }
+}
