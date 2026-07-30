@@ -69,3 +69,4 @@ docs/**
 packages/security/*
 .project/roadmap/current-work.md
 .global
+.project/memory/*
