@@ -33,7 +33,7 @@
   "mcp": {
     "linear": {
       "type": "local",
-      "command": ["npx", "-y", "mcp-linear"],
+      "command": ["bunx", "mcp-linear"],
       "enabled": true,
       "environment": {
         "LINEAR_API_KEY": "{env:LINEAR_API_KEY}"
