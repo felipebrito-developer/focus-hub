@@ -1,0 +1,167 @@
+import type { Meaning, NewMeaning } from "@focus-hub/shared";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { Modal, StyleSheet, TextInput, View } from "react-native";
+import {
+	categoriesAtom,
+	isCategoriesLoadedAtom,
+	loadCategoriesAction,
+} from "../../stores/categoriesStore";
+import { colors, radius, spacing } from "../../theme";
+import { Button, Select, Typography } from "../atoms";
+import { Card } from "../molecules/Card";
+
+interface MeaningCreationModalProps {
+	visible: boolean;
+	onClose: () => void;
+	onSave: (payload: Omit<NewMeaning, "id">) => void;
+	editingMeaning?: Meaning | null;
+}
+
+export function MeaningCreationModal({
+	visible,
+	onClose,
+	onSave,
+	editingMeaning,
+}: MeaningCreationModalProps) {
+	const [name, setName] = useState("");
+	const [desc, setDesc] = useState("");
+	const [categoryId, setCategoryId] = useState<string | null>(null);
+
+	const categories = useAtomValue(categoriesAtom);
+	const loadCategories = useSetAtom(loadCategoriesAction);
+	const isCategoriesLoaded = useAtomValue(isCategoriesLoadedAtom);
+
+	useEffect(() => {
+		if (visible && !isCategoriesLoaded) {
+			loadCategories();
+		}
+	}, [visible, isCategoriesLoaded, loadCategories]);
+
+	useEffect(() => {
+		if (editingMeaning) {
+			setName(editingMeaning.name);
+			setDesc(editingMeaning.description || "");
+			setCategoryId(editingMeaning.categoryId || null);
+		} else {
+			setName("");
+			setDesc("");
+			setCategoryId(null);
+		}
+	}, [editingMeaning]);
+
+	const handleSave = () => {
+		if (!name.trim()) return;
+		onSave({
+			name,
+			description: desc,
+			categoryId,
+			createdAt: editingMeaning?.createdAt || new Date().toISOString(),
+			updatedAt: new Date().toISOString(),
+			isSynced: false,
+			lastSyncedAt: null,
+		});
+	};
+
+	return (
+		<Modal visible={visible} animationType="slide" transparent>
+			<View style={styles.modalOverlay}>
+				<Card style={styles.modalCard}>
+					<View style={styles.header}>
+						<Typography variant="h3" align="center">
+							{editingMeaning ? "Refine Meaning ✎" : "Define Meaning ✦"}
+						</Typography>
+						<Typography
+							variant="bodySmall"
+							color={colors.muted}
+							align="center"
+							style={styles.subtitle}
+						>
+							What truly matters to you? (e.g. Health, Growth)
+						</Typography>
+					</View>
+
+					<TextInput
+						placeholder="Outcome Name"
+						placeholderTextColor={colors.muted}
+						value={name}
+						onChangeText={setName}
+						style={styles.input}
+					/>
+
+					<TextInput
+						placeholder="Why does this matter? (Personal legacy)"
+						placeholderTextColor={colors.muted}
+						value={desc}
+						onChangeText={setDesc}
+						multiline
+						style={[styles.input, styles.textArea]}
+					/>
+
+					<Select
+						label="Life Category"
+						placeholder="Choose a domain..."
+						value={categoryId}
+						options={categories.map((cat) => ({
+							label: cat.name,
+							value: cat.id,
+							color: cat.categoryColor,
+						}))}
+						onValueChange={setCategoryId}
+					/>
+
+					<View style={styles.modalActions}>
+						<Button
+							label="Cancel"
+							variant="outline"
+							onPress={onClose}
+							style={{ flex: 1 }}
+						/>
+						<Button
+							label="Solidify Meaning"
+							onPress={handleSave}
+							style={{ flex: 1 }}
+						/>
+					</View>
+				</Card>
+			</View>
+		</Modal>
+	);
+}
+
+const styles = StyleSheet.create({
+	modalOverlay: {
+		flex: 1,
+		backgroundColor: "rgba(0,0,0,0.8)",
+		justifyContent: "center",
+		padding: spacing.xl,
+	},
+	modalCard: {
+		gap: spacing.lg,
+	},
+	header: {
+		gap: spacing.xs,
+		marginBottom: spacing.sm,
+	},
+	subtitle: {
+		marginTop: spacing.xs,
+	},
+	input: {
+		backgroundColor: colors.surface,
+		borderWidth: 1,
+		borderColor: colors.border,
+		borderRadius: radius.md,
+		padding: spacing.md,
+		color: colors.onBackground,
+		fontSize: 16,
+	},
+	textArea: {
+		height: 100,
+		textAlignVertical: "top",
+	},
+	modalActions: {
+		flexDirection: "row",
+		gap: spacing.sm,
+		marginTop: spacing.md,
+	},
+});
