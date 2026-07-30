@@ -18,6 +18,7 @@
 - [ ] Subagent intermittent empty-output: react-native-developer returned empty twice on FEL-40; code-reviewer returned empty once. Investigate cause (step limit? skill load hang?).
 - [ ] Subagent misreported status: FEL-34 subagent claimed lint GREEN but 29 errors remained. Architect must independently verify every "GREEN" claim.
 - [ ] code-reviewer FEL-37 shallow output: returned APPROVE with no file:line findings (generic prose). Aligned with architect verification so accepted, but indicates reviewer not drilling into diff. Watch on subsequent tasks; consider re-delegating with explicit "list file:line findings" instruction if pattern repeats.
+- [ ] CRITICAL — code-reviewer FEL-35 degenerate repetition loop: returned REJECT with same 2 findings repeated hundreds of times, burning enormous tokens. Output loop did not terminate cleanly. Findings themselves were 1 valid + 1 false positive (architect adjudicated). Pattern: lower-tier reviewer model stuck in output repetition. Mitigation: cap reviewer output length, or add "output ONCE, do not repeat" to prompt. Investigate opencode subagent output-length controls.
 - [ ] Nested .git in apps/mobile (resolved by removing + merging to root). Pattern to check during project setup.
 
 ### Migration Debt
