@@ -1,8 +1,8 @@
-import { atom } from 'jotai';
+import { atom } from "jotai";
 
 // Example atom for global state
 export const appReadyAtom = atom(false);
 export const userPreferencesAtom = atom({
-  theme: 'light',
+  theme: "light",
   minimalistMode: true,
 });

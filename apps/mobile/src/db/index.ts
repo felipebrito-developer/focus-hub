@@ -1,12 +1,12 @@
-import { drizzle } from 'drizzle-orm/op-sqlite';
-import { open } from '@op-engineering/op-sqlite';
+import { open } from "@op-engineering/op-sqlite";
+import { drizzle } from "drizzle-orm/op-sqlite";
 // Import schema from shared package once it's populated
 // import * as schema from '@focus-hub/shared/db/schema';
 
 // 1. Open the local SQLite database using op-sqlite
 export const sqliteDb = open({
-  name: 'focus-hub.sqlite',
-  location: 'default',
+  name: "focus-hub.sqlite",
+  location: "default",
 });
 
 // 2. Initialize Drizzle ORM with the op-sqlite connection
@@ -20,8 +20,8 @@ export const initDb = async () => {
   try {
     // Basic initialization queries can go here if not using drizzle-kit migrate directly on mobile
     // sqliteDb.execute('PRAGMA foreign_keys = ON');
-    console.log('Database initialized');
+    console.log("Database initialized");
   } catch (error) {
-    console.error('Failed to init DB', error);
+    console.error("Failed to init DB", error);
   }
 };
