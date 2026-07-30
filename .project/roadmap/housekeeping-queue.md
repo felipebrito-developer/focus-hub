@@ -9,6 +9,7 @@
 ### Linear Hygiene
 - [x] Move FEL-40 → Done in Linear — 2026-07-29 (verified: name @focus-hub/shared, exports map, bun biome check . exit 0)
 - [x] Move FEL-34 → Done in Linear — 2026-07-29 (verified: biome.json both pkgs, lint/format scripts, bun biome check . exit 0; schema 2.5.6 not 1.9.0 — installed version, acceptable deviation)
+- [x] Move FEL-37 → Done in Linear — 2026-07-29 (verified: config shape test GREEN, db:push exit 0, biome clean; AC "creates ./drizzle artifacts" relaxed user-approved — drizzle-kit push apply-only)
 - [ ] Cancel FEL-19 (duplicate of FEL-40 — older pre-slice artifact)
 - [ ] Cancel FEL-20 (duplicate of FEL-34 — older pre-slice artifact)
 - [ ] Create FEL-56 retroactively: [Infra] turbo.json + root package.json scripts + biome 2.5.6 fix (document the root-orchestration slicing gap + inline fix done)
@@ -16,11 +17,13 @@
 ### Workspace Gaps (record in .global/roadmap/workflow-roadmap.md)
 - [ ] Subagent intermittent empty-output: react-native-developer returned empty twice on FEL-40; code-reviewer returned empty once. Investigate cause (step limit? skill load hang?).
 - [ ] Subagent misreported status: FEL-34 subagent claimed lint GREEN but 29 errors remained. Architect must independently verify every "GREEN" claim.
+- [ ] code-reviewer FEL-37 shallow output: returned APPROVE with no file:line findings (generic prose). Aligned with architect verification so accepted, but indicates reviewer not drilling into diff. Watch on subsequent tasks; consider re-delegating with explicit "list file:line findings" instruction if pattern repeats.
 - [ ] Nested .git in apps/mobile (resolved by removing + merging to root). Pattern to check during project setup.
 
 ### Migration Debt
+- [x] better-sqlite3 native build unavailable (no node-gyp) — resolved 2026-07-29: used @libsql/client as drizzle-kit sqlite driver instead. Flag if other tasks need native sqlite.
 - [ ] packages/security still named @liverubber/security (out of FEL-40 scope). Rename when security spec finalized or earlier if blocking workspace resolution.
-- [ ] drizzle-kit version mismatch: mobile ^0.20.14 vs shared ^0.31.x. Reconcile during FEL-37.
+- [ ] drizzle-kit version mismatch: mobile ^0.20.14 vs shared ^0.31.x. Reconcile during FEL-37. [partially resolved 2026-07-29: shared on ^0.31.9; mobile still ^0.20.14 — reconcile when mobile db init (FEL-35) lands]
 - [ ] apps/mobile test stack still jest (jest.config.js, babel-jest, react-test-renderer present). FEL-41 handles migration.
 - [ ] apps/mobile eslint/prettier devDeps still in package.json (config files removed in FEL-34; deps removal deferred to FEL-41).
 

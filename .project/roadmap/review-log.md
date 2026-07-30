@@ -5,4 +5,4 @@
 
 | Task ID | Date | Reviewers | Verdicts | Commit / Diff | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| _No concluded review gates yet. First rows appended when FEL-37 + subsequent tasks pass Phase 4.5 + close at Phase 5._ | | | | | |
+| FEL-37 | 2026-07-29 | code-reviewer | APPROVE | `06ec10b` | clean — config + scripts + structural test. AC "creates ./drizzle artifacts" relaxed (user-approved): drizzle-kit push is apply-only; push exit 0 = real signal. Reviewer output shallow (no file:line findings) but aligned with architect's independent verification. |
